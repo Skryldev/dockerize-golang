@@ -1,0 +1,25 @@
+services:
+  golang:
+    image: askari:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      APP_ENV: production
+      APP_PORT: 8080
+      GOMAXPROCS: 4
+      GOGC: 100
+    ports:
+      - "8080:8080"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "/app/main", "health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
